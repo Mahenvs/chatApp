@@ -20,7 +20,7 @@ const SignIn = () => {
     if (result?.error) {
       setError("Invalid username or password"); // Set error if login fails
     } else {
-      router.push("/"); // Redirect to the home page or desired route after login
+      router.push("../chats"); // Redirect to the home page or desired route after login
     }
   };
 
