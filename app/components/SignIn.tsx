@@ -49,9 +49,9 @@ const SignIn = () => {
     if (path == "/signup") {
       const URL = "http://localhost:3000/api/auth/signup";
       const data = {
-        username,
-        password,
-        email,
+        username:username.current,
+        password:password.current,
+        email:email.current,
       };
       result = await axios({
         method: "post",
@@ -62,9 +62,10 @@ const SignIn = () => {
       
     } else {
       result = await signIn("credentials", {
-        username,
-        password,
-        email,
+        username:username.current,
+        password:password.current,
+        email:email.current,
+    
         redirect: false, // Disable default redirect
       });
     }

@@ -12,38 +12,46 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
-    id        Int      @id @default(autoincrement())
-    username  String   @unique
-    email     String   @unique
-    chatsFrom Chat[]   @relation("chatsFrom")
-    chatsTo   Chat[]   @relation("chatsTo")
-    messages  Messages[]
+  id         Int      @id @default(autoincrement())
+  userId     String   @unique @default(uuid())
+  username   String   @unique
+  email      String   @unique
+  hashedPswd String   @unique
+
+  // Relation fields with distinct names is necessary as we are referencing both sender and receiver from same table
+  sentChats    Chat[] @relation("Sender")   // Chats where the user is the sender
+  receivedChats Chat[] @relation("Receiver") // Chats where the user is the receiver
+
+  messages Messages[]
 }
 
 model Chat {
-    id        Int      @id @default(autoincrement())
-    fromUser  Int      // Foreign key referencing User (sender)
-    toUser    Int      // Foreign key referencing User (receiver)
-    messages  Messages[]
+  id        Int    @id @default(autoincrement())
+  chatId    String @unique
 
-    // Relations
-    from      User     @relation("chatsFrom", fields: [fromUser], references: [id])
-    to        User     @relation("chatsTo", fields: [toUser], references: [id])
+  fromUser  String // Foreign key referencing User (sender)
+  toUser    String // Foreign key referencing User (receiver)
 
-    // Ensure a unique chat exists between a specific pair of users
-    @@unique([fromUser, toUser], name: "uniqueChatPair")
+  // Relations
+  from User @relation("Sender", fields: [fromUser], references: [userId])
+  to   User @relation("Receiver", fields: [toUser], references: [userId])
+
+  // Ensure a unique chat exists between a specific pair of users
+  @@unique([fromUser, toUser], name: "uniqueChatPair")
+  
+  messages Messages[]
 }
 
-model Messages {
-    id        Int      @id @default(autoincrement())
-    chatId    Int      // Foreign key to Chat
-    senderId  Int      // Foreign key to User (sender)
-    content   String   // The message content
-    timestamp DateTime @default(now())
 
-    // Relations
-    chat      Chat     @relation(fields: [chatId], references: [id])
-    sender    User     @relation(fields: [senderId], references: [id])
+model Messages {
+  id        Int      @id @default(autoincrement())
+  chatId    Int      // Foreign key to Chat
+  senderId  Int      // Foreign key to User (sender)
+  content   String   // The message content
+  timestamp DateTime @default(now())
+
+  // Relations
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  sender    User     @relation(fields: [senderId], references: [id])
 }
