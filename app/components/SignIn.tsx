@@ -49,23 +49,21 @@ const SignIn = () => {
     if (path == "/signup") {
       const URL = "http://localhost:3000/api/auth/signup";
       const data = {
-        username:username.current,
-        password:password.current,
-        email:email.current,
+        username: username.current,
+        password: password.current,
+        email: email.current,
       };
       result = await axios({
         method: "post",
         url: URL,
         data: data,
       });
-      console.log(result);
-      
     } else {
       result = await signIn("credentials", {
-        username:username.current,
-        password:password.current,
-        email:email.current,
-    
+        username: username.current,
+        password: password.current,
+        email: email.current,
+
         redirect: false, // Disable default redirect
       });
     }
@@ -75,10 +73,19 @@ const SignIn = () => {
         formError: "Invalid username or password",
       }));
     } else {
+      resetError()
       router.push("../chats"); // Redirect to the home page or desired route after login
     }
   };
 
+  const resetError = () => {
+    setError({
+      emailReq: false,
+      pswdReq: false,
+      userReq: false,
+      formError: "",
+    });
+  };
   return (
     <section className="flex h-screen items-center justify-center">
       <Card className="mx-auto w-[70%] md:w-[70%] lg:w-[30%]">
@@ -194,6 +201,11 @@ const SignIn = () => {
               )}
             </div>
           </div>
+          {error.formError && (
+            <span className="flex justify-center mt-2 text-red-500">
+              Invalid Credentials
+            </span>
+          )}
           <Button
             className="my-3 w-full"
             // disabled={checkingPassword}
