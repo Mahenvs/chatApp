@@ -7,7 +7,8 @@ export const NEXT_AUTH = {
         CredentialProviders({
             name: "Email",
             credentials: {
-                username: { label: 'Email', type: 'text', placeholder: 'Email' },
+                username: { label: 'Username', type: 'text', placeholder: 'username' },
+                email: { label: 'Email', type: 'email', placeholder: 'Email' },
                 password: { label: 'Password', type: 'password', placeholder: 'Password' },
             },
             async authorize(credentials: any) {
