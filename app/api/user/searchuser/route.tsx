@@ -39,13 +39,25 @@ export async function POST(req: NextRequest) {
       where: {
         userEmail: fromUser,
         connectedUserEmail: user.email,
+        // connectedUserName: user?.username
       },
     });
     if (!existingConnection) {
+      const getName = await prisma.user.findFirst({
+        where:{
+          email: email
+        },
+        select:{
+          username:true
+        }
+      })
+      console.log(getName);
+      
       const connections = await prisma.connections.create({
         data: {
           userEmail: fromUser,
           connectedUserEmail: email,
+          connectedUserName: getName?.username || "Unknown"
         },
       });
       console.log(connections);

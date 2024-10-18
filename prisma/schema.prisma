@@ -60,4 +60,5 @@ model Connections {
   id             Int    @id @default(autoincrement())
   userEmail         String    // Foreign key to the User who made the connection
   connectedUserEmail String   // Foreign key to the connected user
+  connectedUserName String
 }

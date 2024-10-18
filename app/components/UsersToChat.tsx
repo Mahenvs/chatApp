@@ -4,26 +4,32 @@ import React, { useEffect, useState } from "react";
 import { getUsersUrl } from "../lib/url"; // Ensure this imports correctly
 import { useSession } from "next-auth/react";
 import { socket } from "../lib/socket";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import User from "./User";
+interface propsToChat {
+  userHandler: (user: string) => void;
+}
 
-const ListOfUsers = () => {
+const UsersToChat = ({ userHandler }: propsToChat) => {
   const session = useSession();
-  const loggedUser = session?.data?.user?.email
+  const loggedUser = session?.data?.user?.email;
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
 
-  const createRoom = (chatWithUser:string) =>{
+  const createRoom = (chatWithUser: string,chatWithName:string) => {
     // const roomId = chatWithUser+loggedUser
-    localStorage.setItem("chatWithUser",chatWithUser)
-    localStorage.setItem("loggedUser",loggedUser || "")
-    socket.emit("joinChat",chatWithUser,loggedUser)
+    userHandler(chatWithName);
 
-  }
-  
+    localStorage.setItem("chatWithUser", chatWithUser);
+    localStorage.setItem("loggedUser", loggedUser || "");
+    socket.emit("joinChat", chatWithUser, loggedUser);
+  };
+
   useEffect(() => {
     console.log("I am inside useEffect");
-    
+
     socket.on("sendMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -61,10 +67,14 @@ const ListOfUsers = () => {
 
   return (
     <>
-      <div className="flex-1 mt- h-full overflow-auto">
+      <div className="flex-1 h-full overflow-auto">
         {users?.map((item, index) => (
-          <div className="border-b p-4 py-3 cursor-pointer" key={index} onClick={()=>createRoom(item?.connectedUserEmail)}>
-            {item?.connectedUserEmail}
+          <div
+            className="flex gap-2 items-center border-b p-4 py-3 cursor-pointer"
+            key={index}
+            onClick={() => createRoom(item?.connectedUserEmail,item?.connectedUserName)}
+          >
+            <User user={item?.connectedUserName}/>
           </div>
         ))}
       </div>
@@ -72,4 +82,4 @@ const ListOfUsers = () => {
   );
 };
 
-export default ListOfUsers;
+export default UsersToChat;
