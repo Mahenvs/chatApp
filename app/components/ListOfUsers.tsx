@@ -1,104 +1,70 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+"use client";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getUsersUrl } from "../lib/url"; // Ensure this imports correctly
+import { useSession } from "next-auth/react";
+import { socket } from "../lib/socket";
 
 const ListOfUsers = () => {
-  const users = [
-    {
-      name: "chakr",
-      id: 1,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "Vam",
-      id: 3,
-    },
-    {
-      name: "maeh",
-      id: 2,
-    },
-    {
-      name: "oj",
-      id: 3,
-    },
-  ];
+  const session = useSession();
+  const loggedUser = session?.data?.user?.email
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [messages, setMessages] = useState([]);
+
+  const createRoom = (chatWithUser:string) =>{
+    // const roomId = chatWithUser+loggedUser
+    localStorage.setItem("chatWithUser",chatWithUser)
+    localStorage.setItem("loggedUser",loggedUser || "")
+    socket.emit("joinChat",chatWithUser,loggedUser)
+
+  }
+  
+  useEffect(() => {
+    console.log("I am inside useEffect");
+    
+    socket.on("sendMessage", (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    return () => {
+      console.log(messages, "messages are ");
+
+      socket.off("sendMessage");
+    };
+  }, []);
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await axios.get(
+          `${getUsersUrl}?userEmail=${session.data?.user?.email}`
+        );
+        setUsers(response.data.data);
+        console.log(response.data?.data);
+      } catch (err) {
+        setError("Failed to fetch users. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (session.status === "authenticated") {
+      getUsers();
+    } else {
+      setLoading(false);
+    }
+  }, [session.status]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <>
-      {/* <div className="fixed flex min-w-full top-16 z-999 max-w-max  py-3 h-16  border-b bg-background/10 shadow-sm backdrop-blur-md"> */}
-        {/* <Button className="mx-auto my-2 " variant="outline">
-          ➕ New Chat
-        </Button> */}
-      {/* </div> */}
       <div className="flex-1 mt- h-full overflow-auto">
-        {users?.map((item) => (
-          <div className="border-b p-4 py-3" key={item.id}>
-            {item?.name}
+        {users?.map((item, index) => (
+          <div className="border-b p-4 py-3 cursor-pointer" key={index} onClick={()=>createRoom(item?.connectedUserEmail)}>
+            {item?.connectedUserEmail}
           </div>
         ))}
       </div>

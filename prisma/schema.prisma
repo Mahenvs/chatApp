@@ -55,3 +55,9 @@ model Messages {
   chat      Chat     @relation(fields: [chatId], references: [id])
   sender    User     @relation(fields: [senderId], references: [id])
 }
+
+model Connections {
+  id             Int    @id @default(autoincrement())
+  userEmail         String    // Foreign key to the User who made the connection
+  connectedUserEmail String   // Foreign key to the connected user
+}
