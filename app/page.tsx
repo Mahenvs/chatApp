@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Appbar from "./components/Appbar";
 import Chat from "@/app/chats/page";
 
 export default function Home() {

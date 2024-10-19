@@ -1,8 +1,6 @@
 import CredentialProviders from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-import { signIn } from "next-auth/react";
-import { NextResponse } from "next/server";
 import prisma from "@/db";
 import bcrypt from "bcrypt";
 
@@ -63,7 +61,7 @@ export const NEXT_AUTH = {
     callbacks: {
         // If you want to return the fields other than a subset of the token, use session callback
 
-        session: ({ session, token, user }: any) => {
+        session: ({ session, token }: any) => {
             console.log(session);
             if (session && session.user) {
                 session.user.id = token.sub
