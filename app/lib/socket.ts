@@ -1,3 +1,3 @@
 import { io } from "socket.io-client"
-
-export  const socket = io("ws://localhost:3001"); 
+const socketEnd = process.env.SOCKET_URL
+export const socket = io(`ws://${socketEnd}`); 
