@@ -33,7 +33,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
   };
 
   const sendMessageHandler = async () => {
-    console.log("Send message handler");
+    console.log(process.env.NEXT_PUBLIC_SOCKET_URL,"Send message handler ",socket);
     socket.on("connect", () => {
       console.log(`connect ${socket.id}`);
     });

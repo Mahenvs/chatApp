@@ -7,6 +7,8 @@ import { NewChat } from "./Newchat";
 import { useState } from "react";
 
 const Appbar = () => {
+  console.log(process.env.NEXT_PUBLIC_SOCKET_URL,"Send message handler ")
+  
   // To get session related details in client side components
   // To do the same in server component use "await getServerSession()"
   const session = useSession();
