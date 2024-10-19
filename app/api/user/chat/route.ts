@@ -1,6 +1,6 @@
 import prisma from "@/db";
 import { NextResponse } from "next/server";
-\
+
 // const chatSchema =z.object({
 //     chatId: z.string(),
 //     // receiver:
