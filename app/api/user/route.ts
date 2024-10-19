@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { NEXT_AUTH } from "@/app/lib/auth";
 
 const client = new PrismaClient();
 
 export async function GET(request) {
-    // const session = await auth();
-    // console.log(session);
-    const session = await getServerSession(NEXT_AUTH)
-    console.log("session ",session);
+    
     
     const { searchParams } = new URL(request.url);
     const email = searchParams.get("userEmail"); // Get userId from query params
