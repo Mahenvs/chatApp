@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import axios from "axios";
+import { Url } from "../lib/url";
 // interface authForm {
 //   // username: string;
 //   email: string;
@@ -47,7 +48,7 @@ const SignIn = () => {
     let result;
 
     if (path == "/signup") {
-      const URL = "http://localhost:3000/api/auth/signup";
+      const URL = `${Url}auth/signup`
       const data = {
         username: username.current,
         password: password.current,
