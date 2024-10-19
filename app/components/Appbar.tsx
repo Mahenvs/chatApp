@@ -20,6 +20,7 @@ const Appbar = () => {
     <div className="fixed top-0 z-50 py-3 fl ex h-16 w-full items-center gap-2 border-b bg-background/80 px-4 shadow-sm backdrop-blur-md  print:hidden">
       <div className="flex justify-between items-center">
         <div className="flex font-bold text-xl">CHAT APP </div>
+        <h2 className="text-pretty font-mono capitalize">{"Hello "} {session?.data?.user?.name}{"!"}</h2>
         <div className="flex">
           {session?.status !== "authenticated" ? (
             <div className="flex gap-3">

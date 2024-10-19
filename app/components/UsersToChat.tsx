@@ -67,10 +67,10 @@ const UsersToChat = ({ userHandler }: propsToChat) => {
 
   return (
     <>
-      <div className="flex-1 h-full overflow-auto">
+      <div className="flex-1 h-full overflow-auto ">
         {users?.map((item, index) => (
           <div
-            className="flex gap-2 items-center border-b p-4 py-3 cursor-pointer"
+            className="flex gap-2 items-center border-b p-8 py-3 mx-auto cursor-pointer"
             key={index}
             onClick={() => createRoom(item?.connectedUserEmail,item)}
           >

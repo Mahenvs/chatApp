@@ -94,7 +94,7 @@ const Previewmessage = ({ user }: { user: string | null }) => {
                   <div className="flex flex-col">
 
                       {chat.content}
-                      <span className={`text-sm`}>
+                      <span className={`text-sm caption-bottom`}>
                         {parseTime(chat.timestamp)}
                         {/* {chat.senderId === loggedUser ? "You" : chat.senderId} */}
                       </span>
