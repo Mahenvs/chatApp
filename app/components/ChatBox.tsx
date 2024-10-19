@@ -7,8 +7,12 @@ import axios from "axios";
 import { saveChatUrl } from "../lib/url";
 import { useSession } from "next-auth/react";
 import { SendArrowIcon } from "./Icons";
+import { UserType } from "@/app/components/Previewmessage";
+type ChatBoxProps = {
+  user: UserType | null;
+};
+const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
 
-const ChatBox = ({ user }: { user: string }) => {
   const receiver = user?.connectedUserEmail;
   const [message, setMessage] = useState("");
 
@@ -17,8 +21,8 @@ const ChatBox = ({ user }: { user: string }) => {
     autoResize(); // Resize when the component mounts or updates
   }, [message]); // Depend on message to resize when it changes
   const textareaRef = useRef(null);
-
-  if (session == null && session.user && session.user.email) {
+  // && session?.user && session.user.email
+  if (session == null ) {
     return <span>Loading...</span>;
   }
   const loggedUser = session?.user?.email || "unknown";

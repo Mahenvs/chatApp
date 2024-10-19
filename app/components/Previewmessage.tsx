@@ -9,15 +9,28 @@ import axios from "axios";
 import { getChatUrl } from "../lib/url";
 import { parseTime } from "../lib/parseTime";
 
+export type UserType = {
+  connectedUserEmail: string;
+  userEmail: string;
+  connectedUserName: string;
+};
+
+type ChatMessage = {
+  senderId: string;
+  content: string;
+  timestamp: string; // or Date, depending on your use case
+};
 const fetcher = (url: string) =>
   axios.get(url).then((res) => {
     return res.data;
   });
 
-const Previewmessage = ({ user }: { user: string | null }) => {
-  const [messages, setMessages] = useState([]);
+  const Previewmessage = ({ user }: { user: UserType | null }) => {
+
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+
   const chatId =
-    user?.connectedUserEmail < user?.userEmail
+    user && user?.connectedUserEmail < user?.userEmail
       ? `${user?.connectedUserEmail}-${user?.userEmail}`
       : `${user?.userEmail}-${user?.connectedUserEmail}`;
 
