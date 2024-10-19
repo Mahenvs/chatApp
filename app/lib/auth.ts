@@ -61,7 +61,7 @@ export const NEXT_AUTH = {
     callbacks: {
         // If you want to return the fields other than a subset of the token, use session callback
 
-        session: ({ session, token }: any) => {
+        session: ({ session, token }: unknown) => {
             console.log(session);
             if (session && session.user) {
                 session.user.id = token.sub

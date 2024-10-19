@@ -3,7 +3,8 @@ import { PrismaClient } from "@prisma/client";
 
 const client = new PrismaClient();
 
-export async function GET(request) {
+// Update the type
+export async function GET(request: { url: string | URL; }) {
     
     
     const { searchParams } = new URL(request.url);

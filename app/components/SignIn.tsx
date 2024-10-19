@@ -8,11 +8,11 @@ import { signIn } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import axios from "axios";
-interface authForm {
-  // username: string;
-  email: string;
-  password: string;
-}
+// interface authForm {
+//   // username: string;
+//   email: string;
+//   password: string;
+// }
 const SignIn = () => {
   const router = useRouter();
   const path = usePathname();

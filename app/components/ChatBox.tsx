@@ -12,7 +12,7 @@ const ChatBox = ({ user }: { user: string }) => {
   const receiver = user?.connectedUserEmail;
   const [message, setMessage] = useState("");
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   useEffect(() => {
     autoResize(); // Resize when the component mounts or updates
   }, [message]); // Depend on message to resize when it changes
@@ -22,7 +22,7 @@ const ChatBox = ({ user }: { user: string }) => {
     return <span>Loading...</span>;
   }
   const loggedUser = session?.user?.email || "unknown";
-  const textHandler = (e) => {
+  const textHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
@@ -49,6 +49,8 @@ const ChatBox = ({ user }: { user: string }) => {
         content: message,
       },
     });
+    console.log(response);
+    
   };
 
   const autoResize = () => {

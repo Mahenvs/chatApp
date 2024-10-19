@@ -1,11 +1,9 @@
 import prisma from "@/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-// const chatSchema =z.object({
-//     chatId: z.string(),
-//     // receiver:
-// })
-export async function POST(req){
+
+// Update the type 
+export async function POST(req: { json: () => any; }){
     const data = await req.json()
     // const parsedResult = 
     console.log(data);
