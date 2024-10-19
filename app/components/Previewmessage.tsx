@@ -41,7 +41,7 @@ const Previewmessage = ({ user }: { user: string | null }) => {
     };
   }, [socket]);
 
-  const { data, isLoading, isValidating } = useSWR(
+  const { data } = useSWR(
     getChatUrl + chatId,
     fetcher,
     {

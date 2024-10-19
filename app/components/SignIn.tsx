@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import axios from "axios";
 interface authForm {
-  username: string;
+  // username: string;
   email: string;
   password: string;
 }

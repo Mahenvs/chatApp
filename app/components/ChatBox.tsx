@@ -6,7 +6,6 @@ import { socket } from "../lib/socket";
 import axios from "axios";
 import { saveChatUrl } from "../lib/url";
 import { useSession } from "next-auth/react";
-import { ArrowRightIcon, ArrowTopRightIcon } from "@radix-ui/react-icons";
 import { SendArrowIcon } from "./Icons";
 
 const ChatBox = ({ user }: { user: string }) => {

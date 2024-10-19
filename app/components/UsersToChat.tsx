@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { getUsersUrl } from "../lib/url"; // Ensure this imports correctly
 import { useSession } from "next-auth/react";
 import { socket } from "../lib/socket";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import User from "./User";
 interface propsToChat {
   userHandler: (user: string) => void;
@@ -49,6 +48,8 @@ const UsersToChat = ({ userHandler }: propsToChat) => {
         setUsers(response.data.data);
         console.log(response.data?.data);
       } catch (err) {
+        console.error(err);
+        
         setError("Failed to fetch users. Please try again later.");
       } finally {
         setLoading(false);
