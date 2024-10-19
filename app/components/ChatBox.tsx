@@ -12,7 +12,9 @@ type ChatBoxProps = {
   user: UserType | null;
 };
 const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
-
+  if(user == null){
+    return 
+  }
   const receiver = user?.connectedUserEmail;
   const [message, setMessage] = useState("");
 

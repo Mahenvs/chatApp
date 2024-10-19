@@ -8,11 +8,16 @@ import User from "./User";
 interface propsToChat {
   userHandler: (user: string) => void;
 }
-
+type UserType = {
+  connectedUserEmail: string;
+  connectedUserName: string;
+  // Add any other properties that your user object may have
+};
 const UsersToChat = ({ userHandler }: propsToChat) => {
   const session = useSession();
   const loggedUser = session?.data?.user?.email;
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserType[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
