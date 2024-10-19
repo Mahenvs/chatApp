@@ -20,7 +20,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
-export function NewChat({ isOpen:any, onClose:any }) {
+export function NewChat({ isOpen, onClose }:any) {
   const [newUser, setUser] = useState("");
   const session = useSession();
   console.log(session);
