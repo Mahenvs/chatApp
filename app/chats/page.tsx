@@ -1,4 +1,4 @@
-import ChatWrapper from "../components/ChatWrapper";
+import ChatWrapper from "@/app/components/ChatWrapper";
 
 const page = () => {
   
