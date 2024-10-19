@@ -18,13 +18,13 @@ const UsersToChat = ({ userHandler }: propsToChat) => {
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
 
-  const createRoom = (chatWithUser: string,chatWithName:string) => {
-    // const roomId = chatWithUser+loggedUser
+  const createRoom = (receiver: string,chatWithName:string) => {
+    // const roomId = receiver+loggedUser
     userHandler(chatWithName);
 
-    localStorage.setItem("chatWithUser", chatWithUser);
+    localStorage.setItem("receiver", receiver);
     localStorage.setItem("loggedUser", loggedUser || "");
-    socket.emit("joinChat", chatWithUser, loggedUser);
+    socket.emit("joinChat", receiver, loggedUser);
   };
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const UsersToChat = ({ userHandler }: propsToChat) => {
           <div
             className="flex gap-2 items-center border-b p-4 py-3 cursor-pointer"
             key={index}
-            onClick={() => createRoom(item?.connectedUserEmail,item?.connectedUserName)}
+            onClick={() => createRoom(item?.connectedUserEmail,item)}
           >
             <User user={item?.connectedUserName}/>
           </div>

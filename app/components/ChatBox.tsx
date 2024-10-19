@@ -1,59 +1,83 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../lib/socket";
 import axios from "axios";
 import { saveChatUrl } from "../lib/url";
 import { useSession } from "next-auth/react";
+import { ArrowRightIcon, ArrowTopRightIcon } from "@radix-ui/react-icons";
+import { SendArrowIcon } from "./Icons";
 
-const ChatBox = ({chatWithUser}:{chatWithUser:string}) => {
-  const { data: session, status } = useSession();
-console.log(session?.user);
-
+const ChatBox = ({ user }: { user: string }) => {
+  const receiver = user?.connectedUserEmail;
   const [message, setMessage] = useState("");
+
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    autoResize(); // Resize when the component mounts or updates
+  }, [message]); // Depend on message to resize when it changes
+  const textareaRef = useRef(null);
+
+  if (session == null && session.user && session.user.email) {
+    return <span>Loading...</span>;
+  }
+  const loggedUser = session?.user?.email || "unknown";
   const textHandler = (e) => {
     setMessage(e.target.value);
   };
-  
-  const sendMessageHandler =async () => {
+
+  const sendMessageHandler = async () => {
     console.log("Send message handler");
     socket.on("connect", () => {
       console.log(`connect ${socket.id}`);
     });
-    // const chatWithUser = localStorage.getItem("chatWithUser");
-    const loggedUser = localStorage.getItem("loggedUser");
 
-    socket.emit("sendMessage", chatWithUser, loggedUser, message);
-  //   chatId    Int      // Foreign key to Chat
-  // senderId  Int      // Foreign key to User (sender)
-  // content   String   // The message content
-  // timestamp DateTime @default(now())
-  const roomId = chatWithUser < loggedUser ? `${chatWithUser}-${loggedUser}` : `${loggedUser}-${chatWithUser}`;
+    socket.emit("sendMessage", receiver, loggedUser, message);
 
+    const roomId =
+      receiver < loggedUser
+        ? `${receiver}-${loggedUser}`
+        : `${loggedUser}-${receiver}`;
+    setMessage("");
     const response = await axios({
-      method:"POST",
-      url:saveChatUrl,
-      data:{
-        // chatId:
-        // chatWithUser:chat
-      }
-    })
+      method: "post",
+      url: saveChatUrl,
+      data: {
+        chatId: roomId,
+        receiverId: receiver,
+        senderId: loggedUser,
+        content: message,
+      },
+    });
+  };
+
+  const autoResize = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto"; // Reset height
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 100)}px`; // Set height to scrollHeight, but max 240px
+    }
   };
 
   return (
-    <div className="flex items-center mb-0  gap-2 px-2  ">
+    <div className="flex items-center mb-0  gap-2 px-10 ">
       <Textarea
-        className="border-l-0 h-10 py-2 align-text-bottom "
+        ref={textareaRef}
+        className="h-10 max-h-60 border-l-0 border-2  py-2 "
         placeholder="Type your message..."
         value={message}
-        rows={14}
         onChange={(e) => {
           textHandler(e);
         }}
+        style={{ minHeight: "2.5rem" }} // Ensures it starts at the intended height
       ></Textarea>
-      <Button className="h-10" onClick={sendMessageHandler}>
-        Send
+      <Button
+        className="h-10 left-3 "
+        onClick={sendMessageHandler}
+        disabled={message.length == 0}
+      >
+        <SendArrowIcon />
       </Button>
     </div>
   );

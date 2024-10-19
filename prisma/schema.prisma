@@ -20,40 +20,46 @@ model User {
   hashedPswd String   @unique
 
   // Relation fields with distinct names is necessary as we are referencing both sender and receiver from same table
-  sentChats    Chat[] @relation("Sender")   // Chats where the user is the sender
-  receivedChats Chat[] @relation("Receiver") // Chats where the user is the receiver
+  // sentChats    Chat[] @relation("Sender")   // Chats where the user is the sender
+  // receivedChats Chat[] @relation("Receiver") // Chats where the user is the receiver
 
-  messages Messages[]
+  sentMessages Messages[] @relation("Sender")
+  receivedMessages Messages[] @relation("Receiver")
 }
 
-model Chat {
-  id        Int    @id @default(autoincrement())
-  chatId    String @unique
+// model Chat {
+//   id        Int    @id @default(autoincrement())
+//   chatId    String @unique
 
-  fromUser  String // Foreign key referencing User (sender)
-  toUser    String // Foreign key referencing User (receiver)
+//   fromUser  String // Foreign key referencing User (sender)
+//   toUser    String // Foreign key referencing User (receiver)
 
-  // Relations
-  from User @relation("Sender", fields: [fromUser], references: [userId])
-  to   User @relation("Receiver", fields: [toUser], references: [userId])
+//   // Relations
+//   from User @relation("Sender", fields: [fromUser], references: [userId])
+//   to   User @relation("Receiver", fields: [toUser], references: [userId])
 
-  // Ensure a unique chat exists between a specific pair of users
-  @@unique([fromUser, toUser], name: "uniqueChatPair")
+//   // Ensure a unique chat exists between a specific pair of users
+//   @@unique([fromUser, toUser], name: "uniqueChatPair")
   
-  messages Messages[]
-}
+//   // messages Messages[]
+//   // Messages Messages[]
+// }
 
 
 model Messages {
   id        Int      @id @default(autoincrement())
-  chatId    Int      // Foreign key to Chat
-  senderId  Int      // Foreign key to User (sender)
+  chatId    String      // Foreign key to Chat
+  senderId  String      // Foreign key to User (sender)
+  receiverId String
   content   String   // The message content
   timestamp DateTime @default(now())
 
   // Relations
-  chat      Chat     @relation(fields: [chatId], references: [id])
-  sender    User     @relation(fields: [senderId], references: [id])
+  // chat      Chat     @relation(fields: [chatId], references: [chatId])
+  sender    User     @relation("Sender",fields: [senderId], references: [email])
+  receiver  User   @relation("Receiver",fields: [receiverId], references: [email])
+    // @@unique([senderId, receiverId], name: "uniqueMessage")
+
 }
 
 model Connections {

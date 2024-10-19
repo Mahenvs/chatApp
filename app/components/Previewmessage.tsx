@@ -4,13 +4,32 @@ import ChatBox from "./ChatBox";
 import { socket } from "../lib/socket";
 import { useScrollToBottom } from "../lib/use-scroll-to-bottom";
 import { ChatIcon } from "./Icons";
+import useSWR from "swr";
+import axios from "axios";
+import { getChatUrl } from "../lib/url";
+import { parseTime } from "../lib/parseTime";
+
+const fetcher = (url: string) =>
+  axios.get(url).then((res) => {
+    return res.data;
+  });
 
 const Previewmessage = ({ user }: { user: string | null }) => {
   const [messages, setMessages] = useState([]);
+  const chatId =
+    user?.connectedUserEmail < user?.userEmail
+      ? `${user?.connectedUserEmail}-${user?.userEmail}`
+      : `${user?.userEmail}-${user?.connectedUserEmail}`;
 
-  const loggedUser = localStorage.getItem("loggedUser");
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
+
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     socket.on("sendMessage", (msg) => {
@@ -21,6 +40,23 @@ const Previewmessage = ({ user }: { user: string | null }) => {
       socket.off("sendMessage");
     };
   }, [socket]);
+
+  const { data, isLoading, isValidating } = useSWR(
+    getChatUrl + chatId,
+    fetcher,
+    {
+      onSuccess: (fetchedMessages) => {
+        setMessages(fetchedMessages.content);
+      },
+    }
+  );
+  console.log(data?.content);
+
+  if (!user) {
+    return <span>Loading...</span>;
+  }
+  const loggedUser = user?.userEmail;
+  
 
   return (
     <div className="flex flex-col h-full">
@@ -34,7 +70,7 @@ const Previewmessage = ({ user }: { user: string | null }) => {
       ) : (
         <>
           <header className="flex items-center gap-2 p-3 border-b bg-gray-100">
-            <User user={user} />
+            <User user={user?.connectedUserName} />
           </header>
 
           <div
@@ -51,17 +87,18 @@ const Previewmessage = ({ user }: { user: string | null }) => {
                 <div
                   className={`max-w-fit flex rounded-md p-2 border flex-col ${
                     chat.senderId === loggedUser
-                      ? "bg-blue-500 text-white"
+                      ? "bg-customsecondary text-white"
                       : "bg-gray-200 text-black"
                   }`}
                 >
-                  <div className="flex">
-                    <span className={`text-sm`}>
-                      {/* {chat.senderId === loggedUser ? "You" : chat.senderId} */}
-                    </span>
-                  </div>
-                  <div>
-                    <span>{chat.content}</span>
+                  <div className="flex flex-col">
+
+                      {chat.content}
+                      <span className={`text-sm`}>
+                        {parseTime(chat.timestamp)}
+                        {/* {chat.senderId === loggedUser ? "You" : chat.senderId} */}
+                      </span>
+                    
                   </div>
                 </div>
               </div>

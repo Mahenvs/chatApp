@@ -1,4 +1,5 @@
 export const Url = "http://localhost:3000/api/"
 export const searchUserUrl = Url+"user/searchuser"
 export const getUsersUrl = Url +"user" 
-export const saveChatUrl = Url +"user" 
+export const saveChatUrl = Url +"user/chat" 
+export const getChatUrl = Url +"user/chat?chatId=" 
