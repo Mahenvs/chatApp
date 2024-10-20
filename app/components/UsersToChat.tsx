@@ -23,7 +23,6 @@ const UsersToChat = ({ userHandler }: propsToChat) => {
   const [messages, setMessages] = useState([]);
 
   const createRoom = (receiver: string,chatWithName:string) => {
-    // const roomId = receiver+loggedUser
     userHandler(chatWithName);
 
     localStorage.setItem("receiver", receiver);

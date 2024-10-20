@@ -6,7 +6,6 @@ const client = new PrismaClient();
 // Update the type
 export async function GET(request:any) {
     
-    
     const { searchParams } = new URL(request.url);
     const email = searchParams.get("userEmail"); // Get userId from query params
 
