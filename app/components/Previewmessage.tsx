@@ -45,6 +45,8 @@ const fetcher = (url: string) =>
   }, [messages]);
 
   useEffect(() => {
+    console.log(socket);
+    
     socket.on("sendMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
