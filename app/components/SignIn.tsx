@@ -18,7 +18,7 @@ const SignIn = () => {
   const router = useRouter();
   const path = usePathname();
 
-  console.log(path);
+  //console.log(path);
 
   const email = useRef("");
   const password = useRef("");
@@ -48,9 +48,9 @@ const SignIn = () => {
     let result;
 
     if (path == "/signup") {
-      const URL = `${Url}auth/signup`
-      console.log(URL);
-      
+      const URL = `${Url}auth/signup`;
+      //console.log(URL);
+
       const data = {
         username: username.current,
         password: password.current,
@@ -76,7 +76,7 @@ const SignIn = () => {
         formError: "Invalid username or password",
       }));
     } else {
-      resetError()
+      resetError();
       router.push("../chats"); // Redirect to the home page or desired route after login
     }
   };
@@ -93,7 +93,9 @@ const SignIn = () => {
     <section className="flex h-screen items-center justify-center">
       <Card className="mx-auto w-[70%] md:w-[70%] lg:w-[30%]">
         <CardHeader className="text-center">
-          <CardTitle>{path == "/signup" ? "Join ":"SignIn "}to CHAT</CardTitle>
+          <CardTitle>
+            {path == "/signup" ? "Join " : "SignIn "}to CHAT
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4">
@@ -214,8 +216,7 @@ const SignIn = () => {
             // disabled={checkingPassword}
             onClick={handleLogin}
           >
-            {path == "/signup" ? "Join" :"Login"}
-            
+            {path == "/signup" ? "Join" : "Login"}
           </Button>
         </CardContent>
       </Card>

@@ -25,9 +25,8 @@ const fetcher = (url: string) =>
     return res.data;
   });
 
-  const Previewmessage = ({ user }: { user: UserType | null }) => {
-
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+const Previewmessage = ({ user }: { user: UserType | null }) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const chatId =
     user && user?.connectedUserEmail < user?.userEmail
@@ -45,8 +44,8 @@ const fetcher = (url: string) =>
   }, [messages]);
 
   useEffect(() => {
-    console.log(socket);
-    
+    //console.log(socket);
+
     socket.on("sendMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -56,22 +55,17 @@ const fetcher = (url: string) =>
     };
   }, [socket]);
 
-  const { data } = useSWR(
-    getChatUrl + chatId,
-    fetcher,
-    {
-      onSuccess: (fetchedMessages) => {
-        setMessages(fetchedMessages.content);
-      },
-    }
-  );
-  console.log(data?.content);
+  const { data } = useSWR(getChatUrl + chatId, fetcher, {
+    onSuccess: (fetchedMessages) => {
+      setMessages(fetchedMessages.content);
+    },
+  });
+  //console.log(data?.content);
 
   if (!user) {
     return <span>Loading...</span>;
   }
   const loggedUser = user?.userEmail;
-  
 
   return (
     <div className="flex flex-col h-full">
@@ -107,13 +101,11 @@ const fetcher = (url: string) =>
                   }`}
                 >
                   <div className="flex flex-col">
-
-                      {chat.content}
-                      <span className={`text-sm caption-bottom`}>
-                        {parseTime(chat.timestamp)}
-                        {/* {chat.senderId === loggedUser ? "You" : chat.senderId} */}
-                      </span>
-                    
+                    {chat.content}
+                    <span className={`text-sm caption-bottom`}>
+                      {parseTime(chat.timestamp)}
+                      {/* {chat.senderId === loggedUser ? "You" : chat.senderId} */}
+                    </span>
                   </div>
                 </div>
               </div>

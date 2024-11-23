@@ -6,42 +6,42 @@ import { NextResponse } from "next/server";
 //     // receiver:
 // })
 // Update the type 
-export async function POST(req:any){
+export async function POST(req: any) {
     const data = await req.json()
     // const parsedResult = 
-    console.log(data);
+
     const query = await prisma.messages.create({
         data
     })
-    console.log(query);
-    
-    
+
+
+
     return NextResponse.json({
-        data:data,
-        msg:"Chat saved successfully"
+        data: data,
+        msg: "Chat saved successfully"
     })
 }
 
-export async function GET(params:any) {
-    console.log(params);
+export async function GET(params: any) {
+    // //console.log(params);
     const { searchParams } = new URL(params.url); // Extract query params
     const chatId = searchParams.get('chatId'); // Get 'chatId' value
-  console.log(chatId);
-  
-  if (!chatId) {
-    return new Response(JSON.stringify({ error: 'chatId is required' }), {
-      status: 400,
-    });
-  }
+    // //console.log(chatId);
+
+    if (!chatId) {
+        return new Response(JSON.stringify({ error: 'chatId is required' }), {
+            status: 400,
+        });
+    }
     const query = await prisma.messages.findMany({
-        where:{
-            chatId:chatId
+        where: {
+            chatId: chatId
         }
     })
-    console.log(query);
-    
+    // //console.log(query);
+
     return NextResponse.json({
-        content:query
+        content: query
     })
 }
 // id        Int      @id @default(autoincrement())

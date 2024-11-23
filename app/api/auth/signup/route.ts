@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
             { error: "Invalid Credentials" },
             { status: 500 })
     }
-    console.log(prisma);
-    
+    //console.log(prisma);
+
     const { username, email, password } = parseResult.data;
 
     const hashedPswd = await bcrypt.hash(password, 10);

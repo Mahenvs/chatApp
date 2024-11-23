@@ -8,7 +8,7 @@ import NextAuth from "next-auth";
 //         authRoutes: string[]
 //     }
 // }) {
-//     console.log(params);
+//     //console.log(params);
 
 //     return NextResponse.json({
 //         msg: "Hello"

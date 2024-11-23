@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
     const { email, username, fromUser } = parseResult.data;
 
-    console.log(email, username);
+    //console.log(email, username);
     const user = await prisma.user.findFirst({
       where: {
         OR: [{ email }, { username }],
@@ -44,23 +44,23 @@ export async function POST(req: NextRequest) {
     });
     if (!existingConnection) {
       const getName = await prisma.user.findFirst({
-        where:{
-          email: email
+        where: {
+          email: email,
         },
-        select:{
-          username:true
-        }
-      })
-      console.log(getName);
-      
+        select: {
+          username: true,
+        },
+      });
+      //console.log(getName);
+
       const connections = await prisma.connections.create({
         data: {
           userEmail: fromUser,
           connectedUserEmail: email,
-          connectedUserName: getName?.username || "Unknown"
+          connectedUserName: getName?.username || "Unknown",
         },
       });
-      console.log(connections);
+      //console.log(connections);
     }
 
     return NextResponse.json({ msg: "User found", user });

@@ -1,7 +1,4 @@
-import {
-  CheckCircledIcon,
-  CrossCircledIcon,
-} from "@radix-ui/react-icons";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 import { searchUserUrl } from "@/app/lib/url";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,15 +16,32 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-
-export function NewChat({ isOpen, onClose }:any) {
+import { getUsersUrl } from "../lib/url"; // Ensure this imports correctly
+import { useStore } from "../store/useStore";
+export function NewChat({ isOpen, onClose }: any) {
   const [newUser, setUser] = useState("");
   const session = useSession();
-  console.log(session);
-  
+  //console.log(session);
+  const { setUsersN } = useStore();
+  const getNewUsers = async () => {
+    try {
+      const response = await axios.get(
+        `${getUsersUrl}?userEmail=${session.data?.user?.email}`
+      );
+      // setUsers(response.data.data);
+      setUsersN(response.data.data);
+      //console.log(response.data?.data);
+    } catch (err) {
+      console.error(err);
+
+      // setError("Failed to fetch users. Please try again later.");
+    } finally {
+      // setLoading(false);
+    }
+  };
   const [userExists, setUserExists] = useState("");
   const searchUser = async () => {
-    setUserExists("")
+    setUserExists("");
     try {
       const response = await axios({
         method: "post",
@@ -35,14 +49,14 @@ export function NewChat({ isOpen, onClose }:any) {
         data: {
           email: newUser,
           username: "",
-          fromUser:session.data?.user?.email
+          fromUser: session.data?.user?.email,
         },
       });
-      setUserExists("true")
-      console.log(response.status);
+      setUserExists("true");
+      //console.log(response.status);
     } catch (error) {
       console.error(error);
-      setUserExists("false")
+      setUserExists("false");
     }
   };
   return (
@@ -78,7 +92,14 @@ export function NewChat({ isOpen, onClose }:any) {
             <>
               <CheckCircledIcon className="bg-green-300  rounded-full" />
               <span className="text-sm font-sans"> user found</span>
-              <Button size={"sm"} className="p-1" variant={"outline"}>Start Chat</Button>
+              <Button
+                size={"sm"}
+                className="p-1"
+                variant={"outline"}
+                // onClick={getNewUsers}
+              >
+                Start Chat
+              </Button>
             </>
           )}
           {userExists == "false" && (

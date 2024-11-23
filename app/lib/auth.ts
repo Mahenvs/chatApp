@@ -15,7 +15,7 @@ export const NEXT_AUTH = {
             },
             async authorize(credentials: any) {
                 // Here, id cannot be sent . if you want to share the id use callback
-                console.log("credentials are ", credentials, "credentials");
+                //console.log("credentials are ", credentials, "credentials");
                 try {
                     // const password = await bcrypt.hash(credentials.password, 10);
 
@@ -62,14 +62,14 @@ export const NEXT_AUTH = {
         // If you want to return the fields other than a subset of the token, use session callback
 
         session: ({ session, token }: unknown) => {
-            console.log(session);
+            //console.log(session);
             if (session && session.user) {
                 session.user.id = token.sub
             }
             return session
         }
         // jwt: ({ token, user }) => {
-        //     console.log(token);
+        //     //console.log(token);
 
         //     return token;
         // },

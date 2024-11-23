@@ -12,8 +12,8 @@ type ChatBoxProps = {
   user: UserType | null;
 };
 const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
-  if(user == null){
-    return 
+  if (user == null) {
+    return;
   }
   const receiver = user?.connectedUserEmail;
   const [message, setMessage] = useState("");
@@ -24,7 +24,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
   }, [message]); // Depend on message to resize when it changes
   const textareaRef = useRef(null);
   // && session?.user && session.user.email
-  if (session == null ) {
+  if (session == null) {
     return <span>Loading...</span>;
   }
   const loggedUser = session?.user?.email || "unknown";
@@ -33,9 +33,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
   };
 
   const sendMessageHandler = async () => {
-    console.log(process.env.NEXT_PUBLIC_SOCKET_URL,"Send message handler ",socket);
+    //console.log(process.env.NEXT_PUBLIC_SOCKET_URL,"Send message handler ",socket);
     socket.on("connect", () => {
-      console.log(`connect ${socket.id}`);
+      //console.log(`connect ${socket.id}`);
     });
 
     socket.emit("sendMessage", receiver, loggedUser, message);
@@ -55,8 +55,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ user }) => {
         content: message,
       },
     });
-    console.log(response);
-    
+    //console.log(response);
   };
 
   const autoResize = () => {

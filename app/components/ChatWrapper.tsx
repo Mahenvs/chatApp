@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { ChatIcon } from "./Icons";
 
 const ChatWrapper = () => {
-  const [selectedUser, setSelectedUser] = useState<string | null>(null); 
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const { status } = useSession();
 
   if (status != "authenticated") {
@@ -19,9 +19,9 @@ const ChatWrapper = () => {
     );
   }
   const handleUserSelect = (user: string) => {
-    console.log(user);
-    
-    setSelectedUser(user); 
+    //console.log(user);
+
+    setSelectedUser(user);
   };
 
   return (

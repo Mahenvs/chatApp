@@ -10,15 +10,15 @@ export function useScrollToBottom<T extends HTMLElement>(): [
   useEffect(() => {
     const container = containerRef.current;
     const end = endRef.current;
-    console.log(container,end );
-    
+    //console.log(container,end );
+
     if (container && end) {
       const observer = new MutationObserver(() => {
         end.scrollIntoView({ behavior: "instant", block: "end" });
       });
 
-      console.log(observer);
-      
+      //console.log(observer);
+
       observer.observe(container, {
         childList: true,
         subtree: true,

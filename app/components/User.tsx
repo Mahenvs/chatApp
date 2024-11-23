@@ -8,17 +8,19 @@ const User = ({ user }: { user: string }) => {
     return <span>Loading...</span>;
   }
   const loggedUser = session?.user?.name || "unknown";
-  console.log(loggedUser);
-  
+  //console.log(loggedUser);
+
   return (
     <>
       <Avatar>
         <AvatarImage src="h ttps://github.com/shadcn.png" />
         <AvatarFallback className="bg-customprimary text-white ">
-          {user == loggedUser ? "ME" :user?.slice(0, 2).toUpperCase()}
+          {user == loggedUser ? "ME" : user?.slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>{" "}
-      <span className="text-lg capitalize">{user == loggedUser ? "Self" : user}</span>
+      <span className="text-lg capitalize">
+        {user == loggedUser ? "Self" : user}
+      </span>
     </>
   );
 };
